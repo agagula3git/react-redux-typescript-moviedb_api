@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector} from '../redux/hooks'
+import Poster from './Poster'
 
 export default function HomePage() {
 
