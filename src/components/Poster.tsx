@@ -1,12 +1,16 @@
 import React from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../redux/hooks'
+import { setDisplayItemIndicator } from '../redux/actions'
+import './Poster.css';
+
 const API_KEY = process.env.REACT_APP_API_KEY
 
 const IMG_URL = "http://image.tmdb.org/t/p/w1280/"
 const GENRE_URL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`
 
-export interface Props{
+export type MediaData = {
     overview: string;
     poster_path: string;
     release_date: string;
@@ -18,7 +22,7 @@ export interface Props{
     backdrop_path: string;
 }
 
-const Poster: React.FC<Props> = ({
+const Poster: React.FC<MediaData> = ({
     overview,
     poster_path,
     release_date,
@@ -30,23 +34,28 @@ const Poster: React.FC<Props> = ({
     backdrop_path
 }) => {
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const date = release_date ? new Date(release_date) : new Date(first_air_date);
-    const month = date.toLocalDateString('default', {month: 'short'});
+    const month = date.toLocaleDateString('default', {month: 'short'});
     const day = date.getDay();
-    const year = date.getYear() + 1900;
+    const year = date.getFullYear();
+
+    const dispatch = useAppDispatch();
 
     const handleClick = () =>{
+        dispatch(setDisplayItemIndicator(true));
         axios({
             method: 'get',
             url: GENRE_URL
         })
         .then(res =>{
-            history.push(
+            navigate(
                 "/show-one",
                 {
-                    data: {title, overview, original_name, poster_path, backdrop_path},
-                    genre: res.data.genres.filter(item => genre_ids.includes(item.id))
+                    state: {
+                        data: {title, overview, original_name, poster_path, backdrop_path},
+                        genre: res.data.genres.filter((item: any) => genre_ids.includes(item.id))
+                    }
                 }
             );
         })

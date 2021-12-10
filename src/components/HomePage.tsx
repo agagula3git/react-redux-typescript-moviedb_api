@@ -1,37 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector} from '../redux/hooks'
+import { fetchTopRatedMedia, fetchFilteredMedia, updateInputElement, setDisplayItemIndicator } from '../redux/actions'
 import Poster from './Poster'
+import { MediaState } from '../redux/reducer'
+import './HomePage.css'
 
 export default function HomePage() {
 
-    const { loading, searchTerm, selectMedia, filteredMedia, topRatedMedia } = useAppSelector((state: MediaState) => ({
+    const { loading, searchTerm, displayItemIndicator, selectMedia, filteredMedia, topRatedMedia } = useAppSelector((state: MediaState) => ({
         loading: state.loading,
         searchTerm: state.searchTerm,
+        displayItemIndicator: state.displayItemIndicator,
         selectMedia: state.selectMedia,
         filteredMedia: state.filteredMedia,
         topRatedMedia: state.topRatedMedia
     }));
 
-    const [radio, setRadio] = useState('movies');
+    const [radio, setRadio] = useState(selectMedia);
     const [state, setState] = useState({searchItem: '', bool: false});
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value, type} = e.target;
-        if(type === 'radio'){
-            setRadio(name);
-        }else{
-            setState({
-                searchItem: value,
-                bool: true
-            });
-        }
+        dispatch(setDisplayItemIndicator(false))
+        type === 'radio'? setRadio(name) : setState({searchItem: value, bool: true})
     } 
-
+    console.log(searchTerm)
     useEffect(()=>{
-        dispatch(updateInputElement(radio, state.searchItem));
-        state.searchItem.length >= 3 ? dispatch(fetchFilteredMedia(radio, state.searchItem, topRatedMedia)) : dispatch(fetchTopRatedMedia(radio, state.searchItem, state.bool))
+        if( !displayItemIndicator ){
+            console.log('I am here now')
+            dispatch(updateInputElement(radio, state.searchItem));
+            searchTerm.length >= 3 ? dispatch(fetchFilteredMedia(radio, searchTerm, topRatedMedia)) : dispatch(fetchTopRatedMedia(radio, state.searchItem, state.bool))
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state.searchItem, radio])
+    }, [state.searchItem, radio, displayItemIndicator])
 
     const dispatch = useAppDispatch();
 
@@ -41,36 +42,57 @@ export default function HomePage() {
                 type="radio" 
                 id="movies" 
                 name="movies" 
-                checked={radio === "movies"} 
+                checked={selectMedia === "movies"} 
                 onChange={handleChange}
             />
             <input
                 type="radio"
                 id="shows"
                 name="shows"
-                checked={radio === "shows"}
+                checked={selectMedia === "shows"}
                 onChange={handleChange}
             />
             <nav>
-                <label for="movies" className="movies">Movies</label>
-                <label for="shows" className="shows">TV-Shows</label>
+                <label htmlFor="movies" className="movies">Movies</label>
+                <label htmlFor="shows" className="shows">TV-Shows</label>
                 <div className="slider"></div>
             </nav>
             <div className="search-block">
                 <input 
                     type="text" 
                     onChange={handleChange} 
-                    value={state.searchItem} 
-                    name={searchItem} 
+                    value={searchTerm} 
+                    name={searchTerm} 
                     placeholder="Search"
                 />
                 <i className="fa fa-search" aria-hidden="true"></i>
             </div>
             <div className="cards-list">
-                {loading ? <p>Loading...</p> : state.searchItem.length >= 3 ? filteredMedia.map(item => (
-                    <Poster key={item.id} props={item}/>)) 
+                {loading ? <p>Loading...</p> : searchTerm.length >= 3 ? filteredMedia.map(item => (
+                    <Poster 
+                        overview={item.overview}
+                        poster_path={item.poster_path}
+                        release_date={item.release_date}
+                        title={item.title}
+                        vote_average={item.vote_average}
+                        original_name={item.original_name}
+                        first_air_date={item.first_air_date}
+                        genre_ids={item.genre_ids}
+                        backdrop_path={item.backdrop_path}
+                    />
+                )) 
                 : topRatedMedia.map(item => (
-                    <Poster key={item.id} props={item}/>
+                    <Poster 
+                        overview={item.overview}
+                        poster_path={item.poster_path}
+                        release_date={item.release_date}
+                        title={item.title}
+                        vote_average={item.vote_average}
+                        original_name={item.original_name}
+                        first_air_date={item.first_air_date}
+                        genre_ids={item.genre_ids}
+                        backdrop_path={item.backdrop_path}
+                    />
                 ))}
             </div>
         </div>

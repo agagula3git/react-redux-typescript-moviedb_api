@@ -1,23 +1,22 @@
+import { MediaData } from '../components/Poster'
+
 export type MediaState = {
     loading: boolean;
     searchTerm: string;
+    displayItemIndicator: boolean;
     selectMedia: string;
-    filteredMedia: string;
-    topRatedMedia: string;
+    filteredMedia: Array<MediaData>;
+    topRatedMedia: Array<MediaData>;
 }
 
 export const reducer = (
-    state: MediaState = { loading: true, searchTerm: '', selectMedia: 'movies', filteredMedia: [], topRatedMedia: []}, 
+    state: MediaState = { loading: true, searchTerm: '', displayItemIndicator: false, selectMedia: 'movies', filteredMedia: [], topRatedMedia: []}, 
     action: any) : MediaState =>{
         switch(action.type){
             case 'MAKE_REQUEST':
                 return {
                     ...state,
                     loading: true
-                }
-            case 'MAKE_REQUEST1':
-                return {
-                    ...state
                 }
             case 'GET_FILTERED_MEDIA':
                 return {
@@ -37,6 +36,11 @@ export const reducer = (
                     ...state,
                     selectMedia: action.payload.media,
                     searchTerm: action.payload.term
+                }
+            case 'SET_DISPLAY_ITEM_INDICATOR':
+                return {
+                    ...state,
+                    displayItemIndicator: action.payload.active
                 }
             default:
                 return state
