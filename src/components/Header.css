@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script:wght@500&family=Grenze+Gotisch:wght@300&family=Oswald:wght@300&display=swap');
+
+.header{
+    background-color: #212c39;
+    height: 120px;
+    border-bottom: 2px solid rgb(15, 14, 14);
+}
+
+.header img{
+    margin: 20px 0 0 40px;
+    width: 70px;
+    height: 80px;
+}
+
+.logo-header{
+    display: flex;
+    flex-direction: row;
+}
+
+.logo-header p{
+    position: absolute;
+    margin-left: 130px;
+    margin-top: 30px;
+    font-size: 25pt;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+}

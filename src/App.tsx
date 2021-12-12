@@ -9,7 +9,7 @@ import ViewOne from './components/ViewOne'
 
 export default function App() {
   return (
-    <div>
+    <div style={{backgroundColor: "rgba(54, 52, 52, 0.164)"}}>
       <Router>
         <Routes>
           <Route path = "/" element={<HomePage/>}/>

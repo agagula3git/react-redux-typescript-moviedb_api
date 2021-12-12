@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector} from '../redux/hooks'
 import { fetchTopRatedMedia, fetchFilteredMedia, updateInputElement, setDisplayItemIndicator } from '../redux/actions'
 import Poster from './Poster'
+import Header from './Header'
 import { MediaState } from '../redux/reducer'
 import './HomePage.css'
 
@@ -24,7 +25,7 @@ export default function HomePage() {
         dispatch(setDisplayItemIndicator(false))
         type === 'radio'? setRadio(name) : setState({searchItem: value, bool: true})
     } 
-    console.log(searchTerm)
+    
     useEffect(()=>{
         if( !displayItemIndicator ){
             console.log('I am here now')
@@ -37,66 +38,67 @@ export default function HomePage() {
     const dispatch = useAppDispatch();
 
     return (
-        <div className="wrapper">
-            <input 
-                type="radio" 
-                id="movies" 
-                name="movies" 
-                checked={selectMedia === "movies"} 
-                onChange={handleChange}
-            />
-            <input
-                type="radio"
-                id="shows"
-                name="shows"
-                checked={selectMedia === "shows"}
-                onChange={handleChange}
-            />
-            <nav>
-                <label htmlFor="movies" className="movies">Movies</label>
-                <label htmlFor="shows" className="shows">TV-Shows</label>
-                <div className="slider"></div>
-            </nav>
-            <div className="search-block">
+        <div>
+            <Header/>
+            <div className="wrapper">
                 <input 
-                    type="text" 
-                    onChange={handleChange} 
-                    value={searchTerm} 
-                    name={searchTerm} 
-                    placeholder="Search"
+                    type="radio" 
+                    id="movies" 
+                    name="movies" 
+                    checked={selectMedia === "movies"} 
+                    onChange={handleChange}
                 />
-                <i className="fa fa-search" aria-hidden="true"></i>
-            </div>
-            <div className="cards-list">
-                {loading ? <p>Loading...</p> : searchTerm.length >= 3 ? filteredMedia.map(item => (
-                    <Poster 
-                        overview={item.overview}
-                        poster_path={item.poster_path}
-                        release_date={item.release_date}
-                        title={item.title}
-                        vote_average={item.vote_average}
-                        original_name={item.original_name}
-                        first_air_date={item.first_air_date}
-                        genre_ids={item.genre_ids}
-                        backdrop_path={item.backdrop_path}
+                <input
+                    type="radio"
+                    id="shows"
+                    name="shows"
+                    checked={selectMedia === "shows"}
+                    onChange={handleChange}
+                />
+                <nav>
+                    <label htmlFor="movies" className="movies">Movies</label>
+                    <label htmlFor="shows" className="shows">TV-Shows</label>
+                    <div className="slider"></div>
+                </nav>
+                <div className="search-block">
+                    <input 
+                        type="text" 
+                        onChange={handleChange} 
+                        value={searchTerm} 
+                        name={searchTerm} 
+                        placeholder="Search"
                     />
-                )) 
-                : topRatedMedia.map(item => (
-                    <Poster 
-                        overview={item.overview}
-                        poster_path={item.poster_path}
-                        release_date={item.release_date}
-                        title={item.title}
-                        vote_average={item.vote_average}
-                        original_name={item.original_name}
-                        first_air_date={item.first_air_date}
-                        genre_ids={item.genre_ids}
-                        backdrop_path={item.backdrop_path}
-                    />
-                ))}
+                    <i className="fa fa-search" aria-hidden="true"></i>
+                </div>
+                <div className="cards-list">
+                    {loading ? <p>Loading...</p> : searchTerm.length >= 3 ? filteredMedia.map(item => (
+                        <Poster 
+                            overview={item.overview}
+                            poster_path={item.poster_path}
+                            release_date={item.release_date}
+                            title={item.title}
+                            vote_average={item.vote_average}
+                            original_name={item.original_name}
+                            first_air_date={item.first_air_date}
+                            genre_ids={item.genre_ids}
+                            backdrop_path={item.backdrop_path}
+                        />
+                    )) 
+                    : topRatedMedia.map(item => (
+                        <Poster 
+                            overview={item.overview}
+                            poster_path={item.poster_path}
+                            release_date={item.release_date}
+                            title={item.title}
+                            vote_average={item.vote_average}
+                            original_name={item.original_name}
+                            first_air_date={item.first_air_date}
+                            genre_ids={item.genre_ids}
+                            backdrop_path={item.backdrop_path}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     )
-
-
 }
