@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# ReactJS & react-redux - The top 10 rated TV Shows and the top 10 Movies (TheMovieDB API)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
