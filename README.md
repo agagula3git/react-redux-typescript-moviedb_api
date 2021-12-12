@@ -11,11 +11,11 @@ Use TheMovieDB API found at [https://developers.themoviedb.org/3](https://develo
 
 The layout of home page is given by the following image:  
 
-<img src="layout.JPG" width="80%" height="80%">   
+<img src="home-moviedb.JPG" width="80%" height="80%">   
 
 When the user clicks on a specific MOVIE/TV SHOW, he is taken to the details view as shown by following image:  
 
-<img src="layout.JPG" width="80%" height="80%">   
+<img src="view-one-moviedb.JPG" width="80%" height="80%">   
 
 
 ## Getting Started with Create React App
