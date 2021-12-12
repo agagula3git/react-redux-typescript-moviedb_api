@@ -22,19 +22,26 @@ export default function HomePage() {
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value, type} = e.target;
+        if(displayItemIndicator){
+            setState({searchItem: searchTerm, bool: false})
+        }
         dispatch(setDisplayItemIndicator(false))
         if(type === 'radio'){
             setRadio(name);
-            setState({searchItem: '', bool: false});
         }else{
-            setState({searchItem: value, bool: true});
+            console.log(state.searchItem.length)
+            if(state.searchItem.length >= 3){
+                setState({searchItem: value, bool: true});
+            }else{
+                setState({searchItem: value, bool: false});
+            }
         }
     } 
-    
+    console.log(filteredMedia)
     useEffect(()=>{
         if( !displayItemIndicator ){
             dispatch(updateInputElement(radio, state.searchItem));
-            state.searchItem.length >= 3 ? dispatch(fetchFilteredMedia(radio, searchTerm, topRatedMedia)) : dispatch(fetchTopRatedMedia(radio, state.searchItem, state.bool))
+            state.searchItem.length >= 3 ? dispatch(fetchFilteredMedia(radio, searchTerm)) : dispatch(fetchTopRatedMedia(radio, state.searchItem, state.bool))
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.searchItem, radio, displayItemIndicator])
