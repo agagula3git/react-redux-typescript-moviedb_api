@@ -23,14 +23,18 @@ export default function HomePage() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value, type} = e.target;
         dispatch(setDisplayItemIndicator(false))
-        type === 'radio'? setRadio(name) : setState({searchItem: value, bool: true})
+        if(type === 'radio'){
+            setRadio(name);
+            setState({searchItem: '', bool: false});
+        }else{
+            setState({searchItem: value, bool: true});
+        }
     } 
     
     useEffect(()=>{
         if( !displayItemIndicator ){
-            console.log('I am here now')
             dispatch(updateInputElement(radio, state.searchItem));
-            searchTerm.length >= 3 ? dispatch(fetchFilteredMedia(radio, searchTerm, topRatedMedia)) : dispatch(fetchTopRatedMedia(radio, state.searchItem, state.bool))
+            state.searchItem.length >= 3 ? dispatch(fetchFilteredMedia(radio, searchTerm, topRatedMedia)) : dispatch(fetchTopRatedMedia(radio, state.searchItem, state.bool))
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.searchItem, radio, displayItemIndicator])
@@ -71,7 +75,7 @@ export default function HomePage() {
                     <i className="fa fa-search" aria-hidden="true"></i>
                 </div>
                 <div className="cards-list">
-                    {loading ? <p>Loading...</p> : searchTerm.length >= 3 ? filteredMedia.map(item => (
+                    {loading ? <div style={{height: '570px'}}><p>Loading...</p></div> : searchTerm.length >= 3 ? filteredMedia.map(item => (
                         <Poster 
                             overview={item.overview}
                             poster_path={item.poster_path}
